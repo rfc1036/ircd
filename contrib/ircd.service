@@ -1,15 +1,20 @@
 [Unit]
-Description=IRCNet IRC daemon
-After=network.target
+Description=IRC daemon
+Wants=network-online.target
+After=network-online.target network.target
 
 [Service]
 Type=exec
-ExecStart=/home/ircnet/ircd/sbin/ircd -t
+WorkingDirectory=/home/ircd/irc
+ExecStart=/home/ircd/irc/sbin/ircd -t
 ExecReload=/bin/kill -HUP $MAINPID
 Restart=on-failure
-User=ircnet
-ReadOnlyPaths=/home/ircnet/ircd/
-ReadWritePaths=/home/ircnet/ircd/var/
+RestartSec=2
+User=ircd
+Group=ircd
+LimitCORE=infinity
+ReadOnlyPaths=/home/ircd/irc/
+ReadWritePaths=/home/ircd/irc/var/
 PrivateDevices=yes
 PrivateTmp=yes
 ProtectClock=yes
